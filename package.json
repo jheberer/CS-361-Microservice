@@ -10,6 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "axios": "^1.6.7",
+    "express": "^4.18.2",
+    "parsoid": "^0.11.1",
+    "parsoid-jsapi": "^0.0.1",
+    "wikitext-parser": "^0.0.1"
   }
 }
