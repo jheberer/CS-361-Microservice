@@ -5,9 +5,10 @@ const port = 8080;
 // axios can be used to call the wiktimedia API
 const axios = require('axios')
 
-// parsoid can be used to parse the data received from wikimedia
-// documentation here: https://github.com/wikimedia/parsoid-jsapi
-const parsoid = require('parsoid-jsapi')
+// I haven't figured ou thow to use parsoid, wikimedia's official parser,
+// so I'll just get the data as HTML and use an HTML parser to get the relevant
+// info
+const cheerio = require('cheerio')
 
 app.listen(port, () => {
     console.log(`API is hosted at URL: http://localhost:${port}`);
@@ -22,22 +23,27 @@ app.get('/word/:word', async (req, res) => {
 
     const axios_response = await axios.get(`https://en.wiktionary.org/w/api.php`, {
       params: {
-        action: 'query',
+        action: 'parse',
         format: 'json',
-        titles: word,
-        prop: 'revisions',
-        rvprop: 'content',
-      },
+        page: word
+        // prop: 'extracts'
+      }
     });
+    
+    // console.log(axios_response.data)
 
-    const axios_data = axios_response.data;
+    const axios_html = axios_response.data.parse.text['*'];
 
-    const pdoc = await parsoid.parse({ src: axios_data, contentmodel: 'wikitext' });
+    // const $ = cheerio.load(axios_html);
 
-    res.send(pdoc.document.outerHTML)
+    // const etymology_data = $('#Etymology');
 
-    // console.log(pdoc.document.outerHTML)
+    // if (etymology_data.length > 0) {
+    //     const etymology_content = etymology_data.html();
+    //     res.send(etymology_content)
+    // } else {
+    //     console.error('Element with id "Etymology" not found.');
+    // }
 
-    // res.send(yield pdoc.toWikitext());
-
+    res.send(axios_html)
 });
