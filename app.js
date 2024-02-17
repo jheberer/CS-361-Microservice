@@ -21,29 +21,26 @@ app.get('/', (req, res) => {
 app.get('/word/:word', async (req, res) => {
     const word = req.params.word;
 
-    const axios_response = await axios.get(`https://en.wiktionary.org/w/api.php`, {
-      params: {
-        action: 'parse',
-        format: 'json',
-        page: word
-        // prop: 'extracts'
-      }
-    });
+    const axios_response = await axios.get(`https://en.wiktionary.org/api/rest_v1/page/definition/${word}`);
+
+    // res.send(axios_html)
+    const response_data = axios_response.data
+    const part_of_speech = response_data.en[0].partOfSpeech
+    const language = response_data.en[0].language
+
+    // parse the definition--an HTML expression--with cheerio
+    const $ = cheerio.load(response_data.en[0].definitions[0].definition);
+    const definition = $.text();
+
+    const word_package = {
+      'word': word,
+      'language of origin': language,
+      'part of speech': part_of_speech,
+      'common definition': definition
+    }
     
-    // console.log(axios_response.data)
+    // res.send(response_data.en[0].definitions[0].definition)
+    res.send(word_package)
 
-    const axios_html = axios_response.data.parse.text['*'];
-
-    // const $ = cheerio.load(axios_html);
-
-    // const etymology_data = $('#Etymology');
-
-    // if (etymology_data.length > 0) {
-    //     const etymology_content = etymology_data.html();
-    //     res.send(etymology_content)
-    // } else {
-    //     console.error('Element with id "Etymology" not found.');
-    // }
-
-    res.send(axios_html)
+    
 });
