@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 const port = 8080;
 
+const heroku_port = process.env.PORT || 8080;
+
+
 // axios can be used to call the wiktimedia API
 const axios = require('axios')
 
@@ -10,8 +13,8 @@ const axios = require('axios')
 // info
 const cheerio = require('cheerio')
 
-app.listen(port, () => {
-    console.log(`API is hosted at URL: http://localhost:${port}`);
+app.listen(heroku_port, () => {
+    console.log(`API is hosted at URL: http://localhost:${heroku_port}`);
   });
 
 app.get('/', (req, res) => {
