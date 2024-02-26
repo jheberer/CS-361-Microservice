@@ -33,4 +33,5 @@ If successful, the calling application will receive a status code of 200, and a 
 If there was an error--for example, if a non-word is submitted as a parameter--then the API will send a 404 status along with a text message indicating as such.
 
 ### UML Sequence Diagram of a sample use case
-![image](https://github.com/jheberer/CS-361-Microservice/assets/7217117/048fef23-ec54-4aaf-9b38-7d2271c11a76)
+![image](https://github.com/jheberer/CS-361-Microservice/assets/7217117/8c99ffe1-dcc6-4b68-98ef-07c74deb9d9d)
+
