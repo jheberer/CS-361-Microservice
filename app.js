@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 8080;
+const learner_key = '0b34b17f-674a-434f-8829-dbbd35d0c3bb';
 
 const heroku_port = process.env.PORT || 8080;
 
@@ -25,22 +26,25 @@ app.get('/word/:word', async (req, res) => {
     const word = req.params.word;
 
     try {
-      const axios_response = await axios.get(`https://en.wiktionary.org/api/rest_v1/page/definition/${word}`);
+      const axios_response = await axios.get(`https://www.dictionaryapi.com/api/v3/references/collegiate/json/${word}?key=${learner_key}`);
 
       // res.send(axios_html)
-      const response_data = axios_response.data
-      const part_of_speech = response_data.en[0].partOfSpeech
-      const language = response_data.en[0].language
-
-      // parse the definition--an HTML expression--with cheerio
-      const $ = cheerio.load(response_data.en[0].definitions[0].definition);
-      const definition = $.text();
+      const response_data = axios_response.data[0]
+      const stems = response_data.meta.stems
+      const etymology = response_data.et
+      const short_definition = response_data.shortdef
+      const synonyms = response_data.syns
+      const variants = response_data.vrs
+      const part_of_speech = response_data.fl
 
       const word_package = {
         'word': word,
-        'language of origin': language,
-        'part of speech': part_of_speech,
-        'common definition': definition
+        'stems': stems,
+        'etymology': etymology,
+        'short_definition': short_definition,
+        'synonyms': synonyms,
+        'variants': variants, 
+        'part of speech': part_of_speech
       }
       
       // res.send(response_data.en[0].definitions[0].definition)
