@@ -12,7 +12,6 @@ const axios = require('axios')
 // I haven't figured ou thow to use parsoid, wikimedia's official parser,
 // so I'll just get the data as HTML and use an HTML parser to get the relevant
 // info
-const cheerio = require('cheerio')
 
 app.listen(heroku_port, () => {
     console.log(`API is hosted at URL: http://localhost:${heroku_port}`);
